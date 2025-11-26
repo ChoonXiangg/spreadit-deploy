@@ -3,6 +3,8 @@ services:
     build: ../Spreadit
     ports:
       - "8001:8000"
+    environment:
+      - COURSE_SERVICE_URL=http://course-service:8000
     networks:
       - labnet
 
