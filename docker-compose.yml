@@ -1,0 +1,26 @@
+services:
+  user-service:
+    build: ../Spreadit
+    ports:
+      - "8001:8000"
+    networks:
+      - labnet
+
+  course-service:
+    build: ../Spreadit_CourseMicroservice
+    ports:
+      - "8002:8000"
+    environment:
+      - MODULE_SERVICE_URL=http://module-service:8000
+    networks:
+      - labnet
+
+  module-service:
+    build: ../spreadit-module
+    ports:
+      - "8003:8000"
+    networks:
+      - labnet
+
+networks:
+  labnet:
