@@ -22,6 +22,8 @@ services:
     build: ../spreadit-module
     ports:
       - "8003:8000"
+    environment:
+      - POST_SERVICE_URL=http://post-service:8000
     networks:
       - labnet
 
