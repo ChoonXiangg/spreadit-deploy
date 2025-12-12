@@ -6,6 +6,7 @@ services:
     environment:
       - COURSE_SERVICE_URL=http://course-service:8000
       - POST_SERVICE_URL=http://post-service:8000
+      - RABBIT_URL=${RABBIT_URL}
     networks:
       - labnet
 
@@ -15,6 +16,7 @@ services:
       - "8002:8000"
     environment:
       - MODULE_SERVICE_URL=http://module-service:8000
+      - RABBIT_URL=${RABBIT_URL}
     networks:
       - labnet
 
@@ -24,6 +26,7 @@ services:
       - "8003:8000"
     environment:
       - POST_SERVICE_URL=http://post-service:8000
+      - RABBIT_URL=${RABBIT_URL}
     networks:
       - labnet
 
@@ -31,6 +34,8 @@ services:
     build: ../Spreadit_PostMicroservice
     ports:
       - "8004:8000"
+    environment:
+      - RABBIT_URL=${RABBIT_URL}
     networks:
       - labnet
 
