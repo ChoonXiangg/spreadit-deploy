@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: module-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: module-service
+  template:
+    metadata:
+      labels:
+        app: module-service
+    spec:
+      containers:
+        - name: module-service
+          image: spreadit-deploy-module-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POST_SERVICE_URL
+              value: "http://post-service:8000"
+            - name: RABBIT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: RABBIT_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: module-service
+spec:
+  selector:
+    app: module-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30004
+  type: NodePort

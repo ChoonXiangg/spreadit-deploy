@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: spreadit-deploy-user-service:latest
+          imagePullPolicy: Never  # Use local image
+          ports:
+            - containerPort: 8000
+          env:
+            - name: COURSE_SERVICE_URL
+              value: "http://course-service:8000"
+            - name: POST_SERVICE_URL
+              value: "http://post-service:8000"
+            - name: RABBIT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: RABBIT_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30001
+  type: NodePort
